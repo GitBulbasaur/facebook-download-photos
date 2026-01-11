@@ -1,73 +1,128 @@
 # Download Facebook Photos
-This script will download all of your Facebook photos.
+This script will download all publicly availible photos from any public facebook account or private ones if you have them added as friends.
 
-I wanted to delete my Facebook profile since I rarely use it anymore. While Facebook allows you to [download a copy of your data](https://www.facebook.com/help/212802592074644), this does not include photos that you are tagged in. Additionally, some of these photos are not high resolution.
+This script is a fork from https://github.com/tonyflo/facebook-download-photos, the whole script is just modifications of his script.
 
-So I decided to write this script to download Facebook photos that you're tagged in and that you have uploaded. This script can also download photos of other Facebook users that have public pictures.
+I have added some features and quality of life changes.
+First change is that I have divided it into 2 phases, Indexing and Downloading.
 
-## How to Download All Your Photos from Facebook
+# Indexing
+Indexes both albums automatically:
+photos_of 
+photos_by
 
-**NOTE:** You will need to have [Python 3 & uv](https://docs.astral.sh/uv/getting-started/installation/), Google Chrome, and optionally git installed.
+# Uses two-phase indexing:
+1.Collects all fbids via scrolling
+2.Visits each photo page individually
 
-This code was tested on macOS and Linux, but should also work on Windows.
+# Extracts:
+Photo ID (fbid)
+Creation timestamp (actual photo date)
+Highest-quality image URL
+
+Stores everything in a SQLite database:
+path: "photos/<username>/.index.db"
+
+# Download features
+*Downloads photos outside Selenium*
+Uses Facebook CDN URLs directly
+Parallel downloads [default: 3 threads]
+Automatic retries [2 attempts]
+Skips already downloaded & verified files
+
+# Added Multi-user support
+Each user has:
+Separate folders
+Separate database
+The path will be photos/(username)
+
+# SQLite index tracker
+Download status
+SHA-256 hash
+
+# *Quality-of-life*
+Clear status messages:
+--> Login
+--> Album discovery
+--> Index and Download progress with bar
+--> Headless Chrome is used
+# FOLDER STURCTURE 
+```sh
+photos/
+├── username1/
+│   ├── of/
+│   │   ├── 20201225_fb_of_username1_123456789.jpg
+│   ├── by/
+│   │   ├── 20190514_fb_by_username1_987654321.jpg
+│   └── .index.db
+├── username2/
+│   ├── of/
+│   ├── by/
+│   └── .index.db
+```
+
+# Filename format
+YYYYMMDD_fb_<album>_<username>_<fbid>.jpg
+
+# REMOVED
+Removed -a
+
+## How to Download Photos from Facebook
+
+**NOTE:** You will need to have **Python 3.11 or newer**, **Google Chrome** ( the base script was hard coded for google chrome only ), and optionally **git** installed.
+
+This code was tested on Windows 11, but should also work on any OS.
  
 ### 1. Clone or download this repository
 ```sh
-git clone https://github.com/tonyflo/facebook-download-photos.git
+git clone https://github.com/GitBulbasaur/facebook-download-photos.git
 cd facebook-download-photos
 ```
 
-### 2. Download Facebook photos you're tagged in
-Execute the following command to download all Facebook photos that you are tagged in.
+### 2.Install required dependencies
 ```sh
-uv run download.py -e you@example.com -p password -a of
+pip install selenium webdriver-manager tqdm pillow
 ```
-**NOTE:** *Be sure to replace *email* and *password* with your actual Facebook username, email, and password.*
 
-### 3. Download Facebook photos you've uploaded
+### 3. Download Facebook photos from a single user.
+Execute the following command to download all Facebook photos from a single user.
 ```sh
-uv run download.py -e you@example.com -p password -a by
+python download.py -e you@example.com -p password -username
 ```
-**NOTE:** *Be sure to replace *email* and *password* with your actual Facebook username, email, and password.*
+**NOTE:** If you do not use --index-only or --download-only both indexing and downloading will be done one after another. ( check command overview for more details )
+**NOTE:** *Be sure to replace *username*, *email* and *password* with your actual Facebook username, email, and password.*
 
-### 4. Download someone else's Facebook photos
-```
-uv run download.py -u username -e you@example.com -p password -a of
-uv run download.py -u username -e you@example.com -p password -a by
-```
+### 4. Mass/Bulk Download Facebook photos from many users.
 
-### Running without uv
+# Make a user list
+Make a .txt file with all users name in it like, comments and blank spaces are allowed and should not cause any issues.
+username1
+username2
+username3
 
-If you don't want to install uv, you can run the script with a python env as well. For example:
+Name it anything you like.
+# USE --users-file argument instead of -u or -username
 
+# Execute the following command to download all Facebook photos from many users.
 ```sh
-python3 -m venv ~/env/fb
-source ~/env/fb/bin/activate
-
-python3 -m pip install --upgrade pip
-pip install selenium
-pip install webdriver-manager
-
-python download.py -e you@example.com -p password -a by
+python download.py -e you@example.com -p password --users-file "path to the file"
 ```
+**NOTE:** If you do not use --index-only or --download-only both indexing and downloading will be done one after another. ( check command overview for more details )
+**NOTE:** *Be sure to replace *email* and *password* with your actual Facebook email, and password.*
+### WARNING: DO NOT RUN MULTIPLE INSTANCES ON SAME ACCOUNT
 
 ## Command Overview
 ```
-usage: download.py [-h] -e EMAIL -p PASSWORD [-a {of,by}] [-u USERNAME]
+usage: download.py [-h] -e EMAIL -p PASSWORD {[-u USERNAME] or [--users-file USERS_FILE]} {[--index-only] or [--download-only] or nothing}
 
-Download photos from Facebook
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -e EMAIL, --email EMAIL
-                        Your Facebook email
-  -p PASSWORD, --password PASSWORD
-                        Your Facebook password
-  -a {of,by}, --album {of,by}
-                        Photo album to download (default: of). Use "of" to download
-                        tagged photos. Use "by" to download uploaded photos.
-  -u USERNAME, --username USERNAME
-                        Facebook username to download photos from
-  -t TIMEOUT, --timeout TIMEOUT
-                        Wait this many seconds between photos (default: 2)
+options:
+  -h, --help 
+  -e, --email EMAIL
+  -p, --password PASSWORD
+User selection (choose one)
+  -u, --username USERNAME
+  --users-file USERS_FILE
+Execution modes ( default is index+download )
+  --index-only Indexes photos but does not download.
+  --download-only Downloads photos using the existing index.
 ```
