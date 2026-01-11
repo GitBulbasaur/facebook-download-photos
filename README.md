@@ -4,6 +4,7 @@ This script will download all publicly availible photos from any public facebook
 This script is a fork from https://github.com/tonyflo/facebook-download-photos, the whole script is just modifications of his script.
 
 I have added some features and quality of life changes.
+
 First change is that I have divided it into 2 phases, Indexing and Downloading.
 
 # Indexing
@@ -18,35 +19,52 @@ photos_by
 
 # Extracts:
 Photo ID (fbid)
+
 Creation timestamp (actual photo date)
+
 Highest-quality image URL
 
 Stores everything in a SQLite database:
+
 path: "photos/<username>/.index.db"
 
 # Download features
 *Downloads photos outside Selenium*
+
 Uses Facebook CDN URLs directly
+
 Parallel downloads [default: 3 threads]
+
 Automatic retries [2 attempts]
+
 Skips already downloaded & verified files
+
 
 # Added Multi-user support
 Each user has:
+
 Separate folders
+
 Separate database
+
 The path will be photos/(username)
 
 # SQLite index tracker
 Download status
+
 SHA-256 hash
 
 # *Quality-of-life*
 Clear status messages:
+
 --> Login
+
 --> Album discovery
+
 --> Index and Download progress with bar
+
 --> Headless Chrome is used
+
 # FOLDER STURCTURE 
 ```sh
 photos/
@@ -87,18 +105,23 @@ pip install selenium webdriver-manager tqdm pillow
 
 ### 3. Download Facebook photos from a single user.
 Execute the following command to download all Facebook photos from a single user.
+
 ```sh
 python download.py -e you@example.com -p password -username
 ```
 **NOTE:** If you do not use --index-only or --download-only both indexing and downloading will be done one after another. ( check command overview for more details )
+
 **NOTE:** *Be sure to replace *username*, *email* and *password* with your actual Facebook username, email, and password.*
 
 ### 4. Mass/Bulk Download Facebook photos from many users.
 
 # Make a user list
 Make a .txt file with all users name in it like, comments and blank spaces are allowed and should not cause any issues.
+
 username1
+
 username2
+
 username3
 
 Name it anything you like.
@@ -109,7 +132,9 @@ Name it anything you like.
 python download.py -e you@example.com -p password --users-file "path to the file"
 ```
 **NOTE:** If you do not use --index-only or --download-only both indexing and downloading will be done one after another. ( check command overview for more details )
+
 **NOTE:** *Be sure to replace *email* and *password* with your actual Facebook email, and password.*
+
 ### WARNING: DO NOT RUN MULTIPLE INSTANCES ON SAME ACCOUNT
 
 ## Command Overview
