@@ -7,17 +7,17 @@ I have added some features and quality of life changes.
 
 First change is that I have divided it into 2 phases, Indexing and Downloading.
 
-# Indexing
+## Indexing
 Indexes both albums automatically:
 photos_of and
 photos_by
 
-# Uses two-phase indexing:
+### Uses two-phase indexing:
 1.Collects all fbids via scrolling
 
 2.Visits each photo page individually
 
-# Extracts:
+### Extracts:
 Photo ID (fbid)
 
 Creation timestamp (actual photo date)
@@ -28,7 +28,7 @@ Stores everything in a SQLite database:
 
 path: "photos/<username>/.index.db"
 
-# Download features
+### Download features
 *Downloads photos outside Selenium*
 
 Uses Facebook CDN URLs directly
@@ -40,7 +40,7 @@ Automatic retries [2 attempts]
 Skips already downloaded & verified files
 
 
-# Added Multi-user support
+### Added Multi-user support
 Each user has:
 
 Separate folders
@@ -49,12 +49,12 @@ Separate database
 
 The path will be photos/(username)
 
-# SQLite index tracker
+### SQLite index tracker
 Download status
 
 SHA-256 hash
 
-# *Quality-of-life*
+### *Quality-of-life*
 Clear status messages:
 
 --> Login
@@ -65,7 +65,7 @@ Clear status messages:
 
 --> Headless Chrome is used
 
-# FOLDER STURCTURE 
+## FOLDER STURCTURE 
 ```sh
 photos/
 ├── username1/
@@ -80,10 +80,10 @@ photos/
 │   └── .index.db
 ```
 
-# Filename format
+## Filename format
 YYYYMMDD_fb_<album>_<username>_<fbid>.jpg
 
-# REMOVED
+## REMOVED Features
 Removed -a
 
 ## How to Download Photos from Facebook
@@ -103,7 +103,7 @@ cd facebook-download-photos
 pip install selenium webdriver-manager tqdm pillow
 ```
 
-### 3. Download Facebook photos from a single user.
+# Download Facebook photos from a single user.
 Execute the following command to download all Facebook photos from a single user.
 
 ```sh
@@ -113,9 +113,9 @@ python download.py -e you@example.com -p password -username
 
 **NOTE:** *Be sure to replace *username*, *email* and *password* with your actual Facebook username, email, and password.*
 
-### 4. Mass/Bulk Download Facebook photos from many users.
+# Mass/Bulk Download Facebook photos from many users.
 
-# Make a user list
+### Make a user list
 Make a .txt file with all users name in it like, comments and blank spaces are allowed and should not cause any issues.
 
 username1
@@ -125,9 +125,9 @@ username2
 username3
 
 Name it anything you like.
-# USE --users-file argument instead of -u or -username
+### USE --users-file argument instead of -u or -username
 
-# Execute the following command to download all Facebook photos from many users.
+### Execute the following command to download all Facebook photos from many users.
 ```sh
 python download.py -e you@example.com -p password --users-file "path to the file"
 ```
@@ -135,7 +135,7 @@ python download.py -e you@example.com -p password --users-file "path to the file
 
 **NOTE:** *Be sure to replace *email* and *password* with your actual Facebook email, and password.*
 
-### WARNING: DO NOT RUN MULTIPLE INSTANCES ON SAME ACCOUNT
+# WARNING: DO NOT RUN MULTIPLE INSTANCES ON SAME ACCOUNT
 
 ## Command Overview
 ```
