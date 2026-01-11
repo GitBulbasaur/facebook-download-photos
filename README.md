@@ -8,7 +8,7 @@ First change is that I have divided it into 2 phases, Indexing and Downloading.
 
 # Indexing
 Indexes both albums automatically:
-photos_of 
+photos_of and
 photos_by
 
 # Uses two-phase indexing:
