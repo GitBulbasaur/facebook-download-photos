@@ -13,6 +13,7 @@ photos_by
 
 # Uses two-phase indexing:
 1.Collects all fbids via scrolling
+
 2.Visits each photo page individually
 
 # Extracts:
