@@ -28,7 +28,7 @@ Stores everything in a SQLite database:
 
 path: "photos/<username>/.index.db"
 
-### Download features
+## Download features
 *Downloads photos outside Selenium*
 
 Uses Facebook CDN URLs directly
@@ -40,7 +40,7 @@ Automatic retries [2 attempts]
 Skips already downloaded & verified files
 
 
-### Added Multi-user support
+## Added Multi-user support
 Each user has:
 
 Separate folders
@@ -49,12 +49,12 @@ Separate database
 
 The path will be photos/(username)
 
-### SQLite index tracker
+## SQLite index tracker
 Download status
 
 SHA-256 hash
 
-### *Quality-of-life*
+## *Quality-of-life*
 Clear status messages:
 
 --> Login
